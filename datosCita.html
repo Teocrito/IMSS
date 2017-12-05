@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Registra tu cita</title>
+	<link rel="stylesheet" type="text/css" href="public/css/datosCita.css">
+	<link rel="stylesheet" type="text/css" href="public/css/std.css">
+	<link rel="stylesheet" type="text/css" href="public/css/font/css/font-awesome.min.css">
+</head>
+<body>
+	<div id="calendario">
+		<div class="barraTitulo" onclick="mostrarCitas()">Citas Registradas</div>
+		<div class="cita">
+			<h3 class="tituloCita">Proctología</h3>
+			<p class="doc">Hernández Basaldua Inocencio</p>
+			<p class="fecha">03/04/2018</p>
+		</div>
+		<div class="cita">
+			<h3 class="tituloCita">Gastroenterología</h3>
+			<p class="doc">Sánchez Jímenez Hector</p>
+			<p class="fecha">02/05/2018</p>
+		</div>
+		<div class="cita">
+			<h3 class="tituloCita">Traumatología</h3>
+			<p class="doc">Moreno Valle Pedro</p>
+			<p class="fecha">01/06/2018</p>
+		</div>
+	</div>
+	<div id="datos">
+		<h1 class="titulo">Ingresa los datos referentes a tu cita:</h1>
+		<p class="des">Clinica:</p>
+		<input type="text" class="in" placeholder="#4, Av. 5 Febrero, Queretaro, Qro." disabled>
+		<p class="des">Especialidad:</p>
+		<select class="in">
+			<option value="">General</option>
+			<option value="">Urología</option>
+			<option value="">Ginecología</option>
+			<option value="">Traumatología</option>
+			<option value="">Pediatria</option>
+			<option value="">Cardiología</option>
+		</select>
+		<p class="des">Fecha:</p>
+		<input type="date" class="in">
+		<p class="des">Hora:</p>
+		<input type="time" class="in">
+		<button class="btn">Aceptar</button>
+	</div>
+</body>
+<script type="text/javascript" src="public/js/datosCita.js"></script>
+</html>

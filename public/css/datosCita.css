@@ -1,0 +1,77 @@
+#calendario{
+	width: 40%;
+	height: 100%;
+	float: left;
+	box-shadow: 5px 0px 15px 0px rgba(0,0,0,0.7);
+}
+
+#datos{
+	float: left;
+	width: 60%;
+	height: 100%;
+	padding: 5vh 7vw;
+}
+
+.barraTitulo{
+	width: 100%;
+	height: 8vmin;
+	line-height: 8vmin;
+	color: white;
+	font-weight: bold;
+	font-size: 5vmin;
+	float: left;
+	background-color: #005944;
+	text-align:center;
+	box-shadow: 3px 0px 11px -3px rgba(0,0,0,0.7);
+}
+
+.cita{
+	width: calc(100% - 2vw);
+	height: 11vh;
+	padding: 2vh 2vw;
+	border-bottom: 2px solid rgba(0,0,0,0.5);
+	float: left;
+	margin: 0px 1vw;
+}
+
+.tituloCita{
+	color: rgba(0,0,0,0.7);
+	float: left;
+	font-size: 3.6vmin;
+	width: 100%;
+}
+
+.doc{
+	float: left;
+	width: 70%;
+	font-size: 1.8vmin;
+	color: rgba(0,0,0,0.5);
+}
+
+.fecha{
+	width: 30%;
+	float: left;
+	text-align:right;
+	font-size: 1.8vmin;
+	color: rgba(0,0,0,0.5);
+}
+
+@media screen and (max-width: 450px){
+	#calendario{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		top: calc(100% - 8vmin);
+		background-color: white;
+		transition: all 1.5s; 
+	}
+
+	.barraTitulo{
+		cursor: pointer;
+	}
+
+	#datos{
+		width: 100%;
+	}
+}
