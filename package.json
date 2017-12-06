@@ -1,0 +1,24 @@
+{
+  "name": "imss",
+  "version": "1.0.0",
+  "description": "control de citas",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Teocrito/IMSS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Teocrito/IMSS/issues"
+  },
+  "homepage": "https://github.com/Teocrito/IMSS#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "md5": "^2.2.1",
+    "mysql": "^2.15.0"
+  }
+}
