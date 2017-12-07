@@ -36,7 +36,7 @@ REST.prototype.configureExpress = function(connection) {
 	}));
 	app.use(bodyParser.json());
 	var router = express.Router();
-	app.use('/IMSS', router);
+	app.use('/', router);
 	var rest_router = new rest(router, connection, md5);
 	self.startServer();
 }
