@@ -20,7 +20,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 		router.use(express.static(__dirname + '../../'));
 		res.sendFile(path.normalize(__dirname + '/datosCita.html'));
 	});
-	router.post("/IMSS/registro", function(req, res){
+	router.post("/IMSS/registrar", function(req, res){
 		var query = "INSERT INTO afiliados VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?);";
 		var table = ["idAfiliado", "contraseña","numeroAfiliacion","nombre","primerApellido","segundoApellido","telefono","email","idHospital"];
 
@@ -36,6 +36,36 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 				});
 			}
 		});
+	});
+	router.post("/IMSS/logIn", function(req, res){
+		var user = req.body.user;
+		var pass = req.body.pass;
+		if (user && pass) {
+			
+			var query = `SELECT * FROM afiliados WHERE numeroAfiliacion LIKE '${user}' OR telefono LIKE '${user}' OR email LIKE '${user}'`;
+			connection.query(query,function(err,rows){
+				if (err){
+					res.json(err);
+				}else{
+					if (Array.isArray(rows)){
+						if (rows.length == 1){
+							if (rows[0].contrasenia == pass){
+								res.json({log:true,usrId:rows[0].idAfiliado});
+							}else{
+								res.json({log:false})
+							}
+
+						}else{
+							res.json({log:false});
+						}
+					}else{
+						res.json({log:false});
+					}
+				}
+			});
+		}else{
+			res.json({log:false});
+		}
 	});
 }
 
