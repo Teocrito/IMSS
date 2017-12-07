@@ -5,7 +5,6 @@ function log(){
 	ajax.onreadystatechange = function (){
 		if (this.status == 200 && this.readyState == 4){
 			var datos = JSON.parse(this.responseText);
-			console.log(datos);
 			if (datos.log){
 				localStorage.setItem('usrId',datos.usrId);
 				location.assign('IMSS/citas');

@@ -4,6 +4,7 @@ var bodyParser 	= require("body-parser");
 var md5			= require("md5");
 var rest		= require("./rest.js");
 var app 		= express();
+var cors 		= require('cors');
 
 function REST(){
 	var self = this;
@@ -34,6 +35,7 @@ REST.prototype.configureExpress = function(connection) {
 	app.use(bodyParser.urlencoded( {
 		extended : true
 	}));
+	app.use(cors());
 	app.use(bodyParser.json());
 	var router = express.Router();
 	app.use('/', router);
