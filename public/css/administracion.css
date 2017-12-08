@@ -1,0 +1,78 @@
+#menu{
+	width: 40%;
+	height: 100%;
+	float: left;
+	box-shadow: 5px 0px 15px 0px rgba(0,0,0,0.7);
+}
+
+#datos{
+	float: left;
+	width: 60%;
+	height: 100%;
+	padding: 5vh 7vw;
+}
+
+.barraTitulo{
+	width: 100%;
+	height: 8vmin;
+	line-height: 8vmin;
+	color: white;
+	font-weight: bold;
+	font-size: 5vmin;
+	float: left;
+	background-color: #005944;
+	text-align:center;
+	box-shadow: 3px 0px 11px -3px rgba(0,0,0,0.7);
+}
+
+.opcn{
+	width: calc(100% - 2vw);
+	height: 9vh;
+	padding: 2vh 2vw;
+	border-bottom: 2px solid rgba(0,0,0,0.5);
+	float: left;
+	margin: 0px 1vw;
+}
+
+.tituloOpcn{
+	color: rgba(0,0,0,0.7);
+	float: left;
+	font-size: 3.6vmin;
+	width: 100%;
+}
+
+.opciones{
+	width: calc(100% - 10vw);
+	height: 5vh;
+	padding: 2vh 2vw;
+	border-bottom: 2px solid rgba(0,0,0,0.5);
+	float: left;
+	margin: 0px 1vw;
+}
+
+.opcion{
+	color: rgba(0,0,0,0.7);
+	float: left;
+	font-size: 3vmin;
+	width: 100%;
+}
+
+@media screen and (max-width: 450px){
+	#calendario{
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		overflow-y: scroll;
+		top: calc(100% - 8vmin);
+		background-color: white;
+		transition: all 1.5s; 
+	}
+
+	.barraTitulo{
+		cursor: pointer;
+	}
+
+	#datos{
+		width: 100%;
+	}
+}

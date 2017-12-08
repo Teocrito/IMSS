@@ -20,20 +20,26 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 		router.use(express.static(__dirname + '../../'));
 		res.sendFile(path.normalize(__dirname + '/datosCita.html'));
 	});
+	router.get('/IMSS/admin', function(req, res){
+		router.use(express.static(__dirname + '../../'));
+		res.sendFile(path.normalize(__dirname + '/administracion.html'));
+	});
 	router.post("/IMSS/registrar", function(req, res){
-		var query = "INSERT INTO afiliados VALUES(0, ?, ?, ?, ?, ?, ?, ?, ?);";
-		var table = ["idAfiliado", "contraseña","numeroAfiliacion","nombre","primerApellido","segundoApellido","telefono","email","idHospital"];
-
-		query = mysql.format(query, table);
-		connection.query(query, function(err, rows){
+		var afiliacion 	= req.body.af;
+		var nombre 		= req.body.name;
+		var aP 			= req.body.aP;
+		var aM			= req.body.aM;
+		var telefono 	= req.body.tel;
+		var clinica		= req.body.clinica;
+		var correo		= req.body.correo;
+		var pass 		= req.body.pass;
+		var values 		= `'${pass}', '${afiliacion}', '${nombre}', '${aP}', '${aM}', '${telefono}', '${correo}', ${clinica}`;
+		var query = `INSERT INTO afiliados(contrasenia, numeroAfiliacion, nombre, primerApellido, segundoApellido, telefono, email, idHospital) VALUES(${values});`;
+		connection.query(query, function(err){
 			if(err) {
-				res.json({"Error" : true,
-						"Message" : "Error executing Query"
-				});
+				res.json({error:"Es posible que el número de afiliación, correo o teléfono ya están registrados. Verifica tus datos"});
 			} else{
-				res.json({"Error" : false,
-						"Message" : "Usuario registrado"
-				});
+				res.json({reg:true});
 			}
 		});
 	});

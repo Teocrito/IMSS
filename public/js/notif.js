@@ -24,6 +24,17 @@ function ini(){
 	}
 }
 
+function ini2(){
+	if (localStorage.getItem('usrId') != null){
+		location.assign('citas')
+	}
+}
+
+function logOut(){
+	localStorage.removeItem('usrId');
+	location.assign('../imss')
+}
+
 function validar(){
 	if (localStorage.getItem('usrId') == null){
 		location.assign('imss/')

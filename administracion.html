@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>Administración</title>
+	<link rel="stylesheet" type="text/css" href="public/css/administracion.css">
+	<link rel="stylesheet" type="text/css" href="public/css/std.css">
+	<link rel="stylesheet" type="text/css" href="public/css/font/css/font-awesome.min.css">
+</head>
+<body>
+	<div id="menu">
+		<div class="barraTitulo">Elige una opción</div>
+		<div class="opcn">
+			<h3 class="tituloOpcn">Registrar nuevo(a)...</h3>
+		</div>
+		<div class="opciones">
+			<h4 class="opcion">Clínica</h4>
+			<h4 class="opcion">Doctor</h4>
+			<h4 class="opcion">Derechohabiente</h4>
+		</div>
+		<div class="opcn">
+			<h3 class="tituloOpcn">Editar...</h3>
+		</div>
+		<div class="opcn">
+			<h3 class="tituloOpcn">Eliminar...</h3>
+		</div>
+	</div>
+	<button class="btn" onclick="logOut()">Cerrar Sesión</button>
+	<div id="datos">
+		<h1 class="titulo">Ingresa los datos referentes a tu cita:</h1>
+		<p class="des">Clinica:</p>
+		<input id="dir" type="text" class="in" placeholder="#4, Av. 5 Febrero, Queretaro, Qro." disabled>
+		<p class="des">Especialidad:</p>
+		<select class="in" id="esp">
+		</select>
+		<p class="des">Fecha:</p>
+		<input type="date" class="in" pattern=">
+		<p class="des">Hora:</p>
+		<input type="time" class="in">
+		<button class="btn" onclick="guardarCita()">Aceptar</button>
+	</div>
+</body>
+<script type="text/javascript" src="public/js/notif.js" onload="validar()"></script>
+</html>
