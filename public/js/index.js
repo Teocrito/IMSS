@@ -1,13 +1,13 @@
 function log(){
-	us = document.getElementById('usuario').value;
-	pass = document.getElementById('pass').value;
+	var us = document.getElementById('usuario').value;
+	var pass = document.getElementById('pass').value;
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function (){
 		if (this.status == 200 && this.readyState == 4){
 			var datos = JSON.parse(this.responseText);
 			if (datos.log){
 				localStorage.setItem('usrId',datos.usrId);
-				location.assign('IMSS/citas');
+				location.assign('imss/citas');
 			}else{
 				msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña")
 			}
@@ -17,4 +17,10 @@ function log(){
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	dts = 'user='+us+'&pass='+pass;
 	ajax.send(dts);
+}
+
+function key(event){
+	if (event.keyCode == 13){
+		log()
+	}
 }

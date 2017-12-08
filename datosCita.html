@@ -29,22 +29,17 @@
 	<div id="datos">
 		<h1 class="titulo">Ingresa los datos referentes a tu cita:</h1>
 		<p class="des">Clinica:</p>
-		<input type="text" class="in" placeholder="#4, Av. 5 Febrero, Queretaro, Qro." disabled>
+		<input id="dir" type="text" class="in" placeholder="#4, Av. 5 Febrero, Queretaro, Qro." disabled>
 		<p class="des">Especialidad:</p>
-		<select class="in">
-			<option value="">General</option>
-			<option value="">Urología</option>
-			<option value="">Ginecología</option>
-			<option value="">Traumatología</option>
-			<option value="">Pediatria</option>
-			<option value="">Cardiología</option>
+		<select class="in" id="esp">
 		</select>
 		<p class="des">Fecha:</p>
-		<input type="date" class="in">
+		<input type="date" class="in" pattern=">
 		<p class="des">Hora:</p>
 		<input type="time" class="in">
-		<button class="btn">Aceptar</button>
+		<button class="btn" onclick="guardarCita()">Aceptar</button>
 	</div>
 </body>
-<script type="text/javascript" src="public/js/datosCita.js"></script>
+<script type="text/javascript" src="public/js/notif.js" onload="validar()"></script>
+<script type="text/javascript" src="public/js/datosCita.js" onload="loadCitas()"></script>
 </html>

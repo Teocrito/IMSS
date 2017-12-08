@@ -67,6 +67,58 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 			res.json({log:false});
 		}
 	});
+	router.post("/IMSS/getCitas", function(req, res){
+		var user = req.body.user;
+			
+		var query = `SELECT DATE_FORMAT(cA.fecha, '%d/%m/%Y') as "fecha", 
+CONCAT(d.primerApellido," ",d.segundoApellido," ",d.nombre) as "doctor",
+e.nombre as "especialidad" FROM citasAfiliados cA
+INNER JOIN especialidades e ON cA.especialidad = e.idEspecialidad 
+INNER JOIN doctores d ON cA.doctor = d.idDoctor
+WHERE idAfiliado = ${user};`;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					res.json(rows);
+				}else{
+					res.json({err:true});
+				}
+			}
+		});
+	});
+	router.post("/IMSS/getInfoCitas", function(req, res){
+		var user = req.body.user;
+		var query = 'SELECT DISTINCT nombre, idEspecialidad as "id" FROM especialidades';
+		var esp;
+		var dir;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					esp = rows;
+				}else{
+					res.json({err:true});
+				}
+			}
+		});
+		query = `SELECT CONCAT(h.calle," #",a.numeroExterior,", ",h.colonia) as "direccion" 
+FROM afiliados a INNER JOIN hospitales h ON a.idHospital = h.idHospital WHERE idAfiliado=${user}`;
+		/*connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					dir = rows[0].direccion;
+				}else{
+					res.json({err:true});
+				}
+			}
+		});*/
+		res.json(esp);
+	});
 }
 
 module.exports = REST_ROUTER;

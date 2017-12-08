@@ -18,12 +18,12 @@
 	<div id="datos">
 		<h1 class="titulo">Ingresa para poder agendar una cita</h1>
 		<p class="des">Numero de afiliación, teléfono o correo:</p>
-		<input class="in" type="text" id="usuario">
+		<input class="in" type="text" id="usuario" onkeyup="key(event)">
 		<p class="des">Contraseña:</p>
-		<input class="in" type="password" id="pass">
+		<input class="in" type="password" id="pass" onkeyup="key(event)">
 		<button class="btn" onclick="log()">Ingresar</button>
 	</div>
 </body>
 <script type="text/javascript" src="public/js/index.js"></script>
-<script type="text/javascript" src="public/js/notif.js"></script>
+<script type="text/javascript" src="public/js/notif.js" onload="ini()"></script>
 </html>
