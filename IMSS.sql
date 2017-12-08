@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `afiliados` (
   `idAfiliado` int(6) NOT NULL,
-  `contraseña` varchar(250) NOT NULL,
+  `contrasenia` varchar(250) NOT NULL,
   `numeroAfiliacion` varchar(20) NOT NULL,
   `nombre` varchar(20) NOT NULL,
   `primerApellido` varchar(40) NOT NULL,

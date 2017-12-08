@@ -47,6 +47,22 @@ body,html{
 	transition: all .3s;
 }
 
+.btnLogOut{
+	color: white;
+	outline: none;
+	background-color: #005944;
+	font-weight: bold;
+	font-size: 1.6vmax;
+	height: 6vh;
+	line-height: 4vh;
+	float: right;
+	width: 200px;
+	border-radius: 5px;
+	margin-top: 3vh;
+	box-shadow: 0px 5px 4px -5px rgba(0,0,0,0.7);
+	transition: all .3s;
+}
+
 button:hover{
 	transition: all .1s;
 	transform: scale(1.1);
