@@ -12,6 +12,126 @@ function mostrar(opcion){
 	document.getElementById(opcion).classList.toggle('hidden');
 }
 
+function load(){
+	getEspecialidades();
+	getClinicas();
+}
+
+function mostrarMenu(){
+	div = document.getElementById("menu");
+	if (div.style.top == "0px"){
+		div.style.top = "calc(100% - 8vmin)";
+	}else{
+		div.style.top = "0px"
+	}
+}
+
+function getEspecialidades(){
+	var op = "";
+	var drop = document.getElementById('especialidadRegDoc');
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				for (var x = 0; x < datos.length; x++){
+					op += '<option value="'+datos[x].id+'">'+datos[x].nombre+'</option>';
+				}	
+			}
+			drop.innerHTML = op;
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getEspecialidades');
+	ajax.send();
+}
+
+function getClinicas(){
+	var op = "";
+	var drop = document.getElementById('clinicaRegAfi');
+	var drop2 = document.getElementById('clinicaModAfi');
+	var drop3 = document.getElementById('hospitalRegDoc');
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				for (var x = 0; x < datos.length; x++){
+					op += '<option value="'+datos[x].idHospital+'">'+datos[x].idHospital+' - '+datos[x].calle+' #'+datos[x].numeroExterior+', Col.'+datos[x].colonia+'</option>';
+				}	
+			}
+			drop.innerHTML = op;
+			drop2.innerHTML = op;
+			drop3.innerHTML = op;
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicas');
+	ajax.send();
+}
+
+function getClinicaMod(){
+	var drop = document.getElementById('clinicaModAfi');
+	var user = document.getElementById('noAfiliacionModAfi').value;
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				console.log("id: "+datos);
+				for(var i, j = 0; i = drop.options[j]; j++) {
+					console.log(i.value);
+					if(i.value == datos) {
+						drop.selectedIndex = j;
+					    break;
+					}
+				}
+			}else{
+				console.log(datos.err);
+			}
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicaUser');
+	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	ajax.send('user='+user);
+}
+
+function getClinicaDel(){
+	var input= document.getElementById('clinicaDelAfi');
+	var user = document.getElementById('noAfiliacionDelAfi').value;
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				input.value = datos;
+			}else{
+				console.log(datos.err);
+			}
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicaAfiliado');
+	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	ajax.send('user='+user);
+}
+
+function getClinicaDoc(){
+	var input= document.getElementById('hospitalDelDoc');
+	var user = document.getElementById('cedulaDelDoc').value;
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				input.value = datos;
+			}else{
+				console.log(datos.err);
+			}
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicaDoctor');
+	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+	ajax.send('user='+user);
+}
+
 function newClinica(){
 	var colonia 	= document.getElementById('col').value;
 	var calle		= document.getElementById('calle').value;
@@ -107,6 +227,7 @@ function buscarAfiliadoMod(){
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	dts = 'af='+noAfiliacion;
 	ajax.send(dts);
+	getClinicaMod();
 }
 
 function cargarDatosAfiliadoMod(n, ap, am, t, c, h){
@@ -114,14 +235,15 @@ function cargarDatosAfiliadoMod(n, ap, am, t, c, h){
 	document.getElementById('aPaternoModAfi').value = ap;
 	document.getElementById('aMaternoModAfi').value = am;
 	document.getElementById('telefonoModAfi').value = t;
-	document.getElementById('clinicaModAfi').value = h;
 	document.getElementById('correoModAfi').value = c;
+	getClinicaMod();
 }
 
 function modAfiliado(){
 	var noAfi 	= document.getElementById('noAfiliacionModAfi').value;
 	var tel 	= document.getElementById('telefonoModAfi').value;
 	var clinica = document.getElementById('clinicaModAfi').value;
+	var clin 	= clinica.substring(0,1);
 	var correo  = document.getElementById('correoModAfi').value;
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function(){
@@ -136,7 +258,7 @@ function modAfiliado(){
 	};
 	ajax.open('POST', 'http://127.0.0.1:3000/imss/modAfiliado');
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-	dts = 'af='+noAfi+'&tel='+tel+'&cli='+clinica+'&c='+correo;
+	dts = 'af='+noAfi+'&tel='+tel+'&cli='+clin+'&c='+correo;
 	ajax.send(dts);
 }
 
@@ -165,8 +287,8 @@ function cargarDatosAfiliadoDel(n, ap, am, t, c, h){
 	document.getElementById('aPaternoDelAfi').value = ap;
 	document.getElementById('aMaternoDelAfi').value = am;
 	document.getElementById('telefonoDelAfi').value = t;
-	document.getElementById('clinicaDelAfi').value = h;
 	document.getElementById('correoDelAfi').value = c;
+	getClinicaDel();
 }
 
 function eliminarAfiliado(){
@@ -213,7 +335,7 @@ function cargarDatosDoctor(n, ap, am, e, h){
 	document.getElementById('aPaternoDelDoc').value = ap;
 	document.getElementById('aMaternoDelDoc').value = am;
 	document.getElementById('especialidadDelDoc').value = e;
-	document.getElementById('hospitalDelDoc').value = h;
+	getClinicaDoc();
 }
 
 function eliminarDoctor(){

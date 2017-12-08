@@ -21,7 +21,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 		res.sendFile(path.normalize(__dirname + '/datosCita.html'));
 	});
 	router.get('/IMSS/admin', function(req, res){
-		router.use(express.static(__dirname + '/'));
+		router.use(express.static(__dirname + '../../'));
 		res.sendFile(path.normalize(__dirname + '/administracion.html'));
 	});
 	router.post("/IMSS/registrar", function(req, res){
@@ -46,7 +46,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 	router.post("/IMSS/logIn", function(req, res){
 		var user = req.body.user;
 		var pass = req.body.pass;
-		if (usr == 'admin' && pass == 'admin'){
+		if (user == 'admin' && pass == 'admin'){
 			res.json({admin:true});
 			return
 		}
@@ -112,6 +112,20 @@ WHERE idAfiliado = ${user};`;
 			}
 		});
 	});
+	router.post("/IMSS/getClinicas", function(req, res){
+		var query = 'SELECT * FROM hospitales';
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					res.json(rows);
+				}else{
+					res.json({err:true});
+				}
+			}
+		});
+	});
 	router.post("/IMSS/getClinicaUsuario", function(req, res){
 		var user = req.body.user;
 		var query = `SELECT CONCAT(h.calle," #",h.numeroExterior,", ",h.colonia) as "direccion" FROM afiliados a 
@@ -125,6 +139,50 @@ INNER JOIN hospitales h ON a.idHospital=h.idHospital WHERE idAfiliado=${user}`;
 				}else{
 					res.json({err:true});
 				}
+			}
+		});
+	});
+	router.post("/IMSS/getClinicaAfiliado", function(req, res){
+		var user = req.body.user;
+		var query = `SELECT CONCAT(h.calle," #",h.numeroExterior,", ",h.colonia) as "direccion" FROM afiliados a 
+INNER JOIN hospitales h ON a.idHospital=h.idHospital WHERE numeroAfiliacion=${user}`;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					res.json(rows[0].direccion);
+				}else{
+					res.json({err:true});
+				}
+			}
+		});
+	});
+
+	router.post("/IMSS/getClinicaDoctor", function(req, res){
+		var user = req.body.user;
+		var query = `SELECT CONCAT(h.calle," #",h.numeroExterior,", ",h.colonia) as "direccion" FROM doctores d 
+INNER JOIN hospitales h ON d.idHospital=h.idHospital WHERE cedula=${user}`;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				if (Array.isArray(rows)){
+					res.json(rows[0].direccion);
+				}else{
+					res.json({err:true});
+				}
+			}
+		});
+	});
+	router.post("/IMSS/getClinicaUser", function(req, res){
+		var user = req.body.user;
+		var query = `SELECT idHospital AS id FROM hospitales WHERE idHospital = (SELECT idHospital FROM afiliados WHERE numeroAfiliacion = ${user})`;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true});
+			}else{
+				res.json(rows[0].id);
 			}
 		});
 	});

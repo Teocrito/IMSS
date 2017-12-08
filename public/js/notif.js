@@ -36,7 +36,7 @@ function validar(){
 }
 
 function validarAdmin(){
-	if (localStorage.getItem('admin') != true){
+	if (localStorage.getItem('admin') == null){
 		location.assign('http://'+location.host+'/imss')
 	}
 }

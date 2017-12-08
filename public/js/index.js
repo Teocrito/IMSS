@@ -11,7 +11,7 @@ function log(){
 				location.assign('http://'+location.host+'/imss/citas');
 			}else{
 				if (datos.admin) {
-					localStorage.setItem('admi',true);
+					localStorage.setItem('admin',true);
 					location.assign('http://'+location.host+'/imss/admin');	
 				}else{
 					msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña");
