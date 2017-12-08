@@ -7,9 +7,15 @@ function log(){
 			var datos = JSON.parse(this.responseText);
 			if (datos.log){
 				localStorage.setItem('usrId',datos.usrId);
-				location.assign('imss/citas');
+				localStorage.setItem('usrHosp',datos.hosp);
+				location.assign('http://'+location.host+'/imss/citas');
 			}else{
-				msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña")
+				if (datos.admin) {
+					localStorage.setItem('admi',true);
+					location.assign('http://'+location.host+'/imss/admin');	
+				}else{
+					msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña");
+				}
 			}
 		}
 	};

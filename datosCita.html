@@ -35,9 +35,10 @@
 		<select class="in" id="esp">
 		</select>
 		<p class="des">Fecha:</p>
-		<input type="date" class="in" pattern=">
+		<input type="date" class="in" id="fecha" onchange="getHrs()">
 		<p class="des">Hora:</p>
-		<input type="time" class="in">
+		<select class="in" id="hrs">
+		</select>
 		<button class="btn" onclick="guardarCita()">Aceptar</button>
 	</div>
 </body>

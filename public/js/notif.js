@@ -20,23 +20,23 @@ function hide(){
 
 function ini(){
 	if (localStorage.getItem('usrId') != null){
-		location.assign('imss/citas')
-	}
-}
-
-function ini2(){
-	if (localStorage.getItem('usrId') != null){
-		location.assign('citas')
+		location.assign('http://'+location.host+'/imss/citas')
 	}
 }
 
 function logOut(){
 	localStorage.removeItem('usrId');
-	location.assign('../imss')
+	location.assign('http://'+location.host+'/imss')
 }
 
 function validar(){
 	if (localStorage.getItem('usrId') == null){
-		location.assign('imss/')
+		location.assign('http://'+location.host+'/imss')
+	}
+}
+
+function validarAdmin(){
+	if (localStorage.getItem('admin') != true){
+		location.assign('http://'+location.host+'/imss')
 	}
 }
