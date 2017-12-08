@@ -34,3 +34,9 @@ function validar(){
 		location.assign('http://'+location.host+'/imss')
 	}
 }
+
+function validarAdmin(){
+	if (localStorage.getItem('admin') != true){
+		location.assign('http://'+location.host+'/imss')
+	}
+}
