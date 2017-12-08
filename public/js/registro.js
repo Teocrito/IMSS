@@ -14,8 +14,8 @@ function reg(){
 			if (this.status == 200 && this.readyState == 4){
 				var datos = JSON.parse(this.responseText);
 				if (datos.reg){
-					localStorage.setItem('usrId',datos.usrId);
-					location.assign('citas');
+					msgAlrt(datos.reg);
+					location.assign('index');
 				}else{
 					msgErr(datos.error)
 				}

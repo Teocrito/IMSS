@@ -11,35 +11,154 @@
 <body>
 	<div id="menu">
 		<div class="barraTitulo">Elige una opción</div>
-		<div class="opcn">
+		<div class="opcn" onclick="show('registrar')">
 			<h3 class="tituloOpcn">Registrar nuevo(a)...</h3>
 		</div>
-		<div class="opciones">
-			<h4 class="opcion">Clínica</h4>
-			<h4 class="opcion">Doctor</h4>
-			<h4 class="opcion">Derechohabiente</h4>
+		<div class="opciones hidden" id="registrar">
+			<h4 class="opcion" onclick="mostrar('regClin')">Hospital</h4>
+			<h4 class="opcion" onclick="mostrar('regDoc')">Doctor</h4>
+			<h4 class="opcion" onclick="mostrar('regAfi')">Derechohabiente</h4>
 		</div>
-		<div class="opcn">
-			<h3 class="tituloOpcn">Editar...</h3>
+		<div class="opcn" onclick="show('modificar')">
+			<h3 class="tituloOpcn">Modificar...</h3>
 		</div>
-		<div class="opcn">
+		<div class="opciones hidden" id="modificar">
+			<h4 class="opcion" onclick="mostrar('modAfi')">Derechohabiente</h4>
+		</div>
+		<div class="opcn" onclick="show('eliminar')">
 			<h3 class="tituloOpcn">Eliminar...</h3>
+		</div>
+		<div class="opciones hidden" id="eliminar">
+			<h4 class="opcion" onclick="mostrar('delDoc')">Doctor</h4>
+			<h4 class="opcion" onclick="mostrar('delAfi')">Derechohabiente</h4>
 		</div>
 	</div>
 	<button class="btn" onclick="logOut()">Cerrar Sesión</button>
-	<div id="datos">
-		<h1 class="titulo">Ingresa los datos referentes a tu cita:</h1>
-		<p class="des">Clinica:</p>
-		<input id="dir" type="text" class="in" placeholder="#4, Av. 5 Febrero, Queretaro, Qro." disabled>
-		<p class="des">Especialidad:</p>
-		<select class="in" id="esp">
+
+	<div id="regClin" class="datos hidden">
+		<h1 class="titulo">Ingresa los datos de la clínica:</h1>
+		<p class="des">Colonia:</p>
+		<input type="text" class="in" id="col">
+		<p class="des">Calle:</p>
+		<input type="text" class="in" id="calle">
+		<p class="des">Número exterior:</p>
+		<input type="number" class="in" id="no">
+		<button class="btn" onclick="newClinica()">Registrar</button>
+	</div>
+
+	<div id="regAfi" class="datos hidden">
+		<h1 class="titulo">Ingresa los datos del derechohabiente:</h1>
+		<p class="des">Número de afiliación:</p>
+		<input type="text" class="in" id="noAfiliacionRegAfi">
+		<p class="des">Nombre:</p>
+		<input type="text" class="in" id="nombreRegAfi">
+		<p class="des">Primer Apellido:</p>
+		<input type="text" class="in" id="aPaternoRegAfi">
+		<p class="des">Segundo Apellido:</p>
+		<input type="text"  class="in" id="aMaternoRegAfi">
+		<p class="des">Teléfono:</p>
+		<input type="text"  class="in" id="telefonoRegAfi">
+		<p class="des">Clínica Asignada:</p>
+		<select name="clinicaRegAfi" id="clinicaRegAfi" class="in">
+			
 		</select>
-		<p class="des">Fecha:</p>
-		<input type="date" class="in" pattern=">
-		<p class="des">Hora:</p>
-		<input type="time" class="in">
-		<button class="btn" onclick="guardarCita()">Aceptar</button>
+		<input type="text"  class="in" id="clinicaRegAfi">
+		<p class="des">Correo Electrónico:</p>
+		<input type="mail" class="in" id="correoRegAfi">
+		<p class="des">Contraseña:</p>
+		<input type="password" class="in" id="passRegAfi">
+		<p class="des">Confirmar contraseña:</p>
+		<input type="password" class="in" id="pass2RegAfi">
+		<button class="btn" onclick="newAfiliado()">Registrar</button>
+	</div>
+
+	<div id="regDoc" class="datos hidden">
+		<h1 class="titulo">Ingresa los datos del doctor:</h1>
+		<p class="des">Nombre:</p>
+		<input type="text" class="in" id="nombreRegDoc">
+		<p class="des">Primer Apellido:</p>
+		<input type="text" class="in" id="aPaternoRegDoc">
+		<p class="des">Segundo Apellido:</p>
+		<input type="text" class="in" id="aMaternoRegDoc">
+		<p class="des">Hospital:</p>
+		<input type="text" class="in" id="hospitalRegDoc">
+		<p class="des">Especialidad:</p>
+		<input type="text" class="in" id="especialidadRegDoc">
+		<p class="des">Cédula profesional:</p>
+		<input type="text" class="in" id="cedulaRegDoc">
+		<button class="btn" onclick="newDoctor()">Registrar</button>
+	</div>
+
+	<div id="modAfi" class="datos hidden">
+		<div class="busqueda">
+			<h1 class="titulo">Modificar derechohabiente:</h1>
+			<p class="des">Ingresa el número de afiliación:</p>
+			<input type="text" class="in" id="noAfiliacionModAfi">
+			<button class="btn" onclick="buscarAfiliadoMod()">Buscar</button>
+		</div>
+		<div id="datosModAfi" class="hidden">
+			<p class="des">Nombre:</p>
+			<input type="text" class="in" id="nombreModAfi" disabled>
+			<p class="des">Primer Apellido:</p>
+			<input type="text" class="in" id="aPaternoModAfi" disabled>
+			<p class="des">Segundo Apellido:</p>
+			<input type="text"  class="in" id="aMaternoModAfi" disabled>
+			<p class="des">Teléfono:</p>
+			<input type="text"  class="in" id="telefonoModAfi">
+			<p class="des">Clínica Asignada:</p>
+			<input type="text"  class="in" id="clinicaModAfi">
+			<p class="des">Correo Electrónico:</p>
+			<input type="mail" class="in" id="correoModAfi">
+			<button class="btn" onclick="modAfiliado()">Modificar</button>
+		</div>
+	</div>
+
+	<div id="delDoc" class="datos hidden">
+		<div class="busqueda">
+			<h1 class="titulo">Eliminar doctor:</h1>
+			<p class="des">Ingresa la cédula profesional:</p>
+			<input type="text" class="in" id="cedulaDelDoc">
+			<button class="btn" onclick="buscarDoctor()">Buscar</button>
+		</div>
+		<div id="datosDelDoc" class="hidden">
+			<p class="des">Nombre:</p>
+			<input type="text" class="in" id="nombreDelDoc" disabled>
+			<p class="des">Primer Apellido:</p>
+			<input type="text" class="in" id="aPaternoDelDoc" disabled>
+			<p class="des">Segundo Apellido:</p>
+			<input type="text" class="in" id="aMaternoDelDoc" disabled>
+			<p class="des">Hospital:</p>
+			<input type="text" class="in" id="hospitalDelDoc" disabled>
+			<p class="des">Especialidad:</p>
+			<input type="text" class="in" id="especialidadDelDoc" disabled>
+			<button class="btn" onclick="eliminarDoctor()">Eliminar</button>
+		</div>
+	</div>
+
+	<div id="delAfi" class="datos hidden">
+		<div class="busqueda">
+			<h1 class="titulo">Eliminar derechohabiente:</h1>
+			<p class="des">Ingresa el número de afiliación:</p>
+			<input type="text" class="in" id="noAfiliacionDelAfi">
+			<button class="btn" onclick="buscarAfiliadoDel()">Buscar</button>
+		</div>
+		<div id="datosDelAfi" class="hidden">
+			<p class="des">Nombre:</p>
+			<input type="text" class="in" id="nombreDelAfi" disabled>
+			<p class="des">Primer Apellido:</p>
+			<input type="text" class="in" id="aPaternoDelAfi" disabled>
+			<p class="des">Segundo Apellido:</p>
+			<input type="text"  class="in" id="aMaternoDelAfi" disabled>
+			<p class="des">Teléfono:</p>
+			<input type="text"  class="in" id="telefonoDelAfi" disabled>
+			<p class="des">Clínica Asignada:</p>
+			<input type="text"  class="in" id="clinicaDelAfi" disabled>
+			<p class="des">Correo Electrónico:</p>
+			<input type="mail" class="in" id="correoDelAfi" disabled>
+			<button class="btn" onclick="eliminarAfiliado()">Eliminar</button>
+		</div>
 	</div>
 </body>
 <script type="text/javascript" src="public/js/notif.js" onload="validar()"></script>
+<script type="text/javascript" src="public/js/administracion.js"></script>
 </html>

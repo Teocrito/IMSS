@@ -39,7 +39,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 			if(err) {
 				res.json({error:"Es posible que el número de afiliación, correo o teléfono ya están registrados. Verifica tus datos"});
 			} else{
-				res.json({reg:true});
+				res.json({reg:"Registro exitoso. Inicia sesión para continuar."});
 			}
 		});
 	});
@@ -125,6 +125,123 @@ FROM afiliados a INNER JOIN hospitales h ON a.idHospital = h.idHospital WHERE id
 		});*/
 		res.json(esp);
 	});
+
+	router.post("/imss/regClinica", function(req, res){
+		var col = req.body.col;
+		var calle = req.body.calle;
+		var num = req.body.numero;
+		var query = `INSERT INTO hospitales(colonia, calle, numeroExterior) VALUES('${col}', '${calle}', ${num})`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:"Verifica los datos."});
+			} else{
+				res.json({reg:"Clínica registrada correctamente."});
+			}
+		});
+	});
+	router.post("/imss/regAfiliado", function(req, res){
+		var afiliacion 	= req.body.af;
+		var nombre 		= req.body.name;
+		var aP 			= req.body.aP;
+		var aM			= req.body.aM;
+		var telefono 	= req.body.tel;
+		var clinica		= req.body.clinica;
+		var correo		= req.body.correo;
+		var pass 		= req.body.pass;
+		var values 		= `'${pass}', '${afiliacion}', '${nombre}', '${aP}', '${aM}', '${telefono}', '${correo}', ${clinica}`;
+		var query = `INSERT INTO afiliados(contrasenia, numeroAfiliacion, nombre, primerApellido, segundoApellido, telefono, email, idHospital) VALUES(${values});`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:"Es posible que el número de afiliación, correo o teléfono ya están registrados. Verifica tus datos"});
+			} else{
+				res.json({reg:"Derechohabiente registrado correctamente."});
+			}
+		});
+	});
+	router.post("/imss/regDoctor", function(req, res){
+		var nombre 	= req.body.nombre;
+		var aP 		= req.body.pA;
+		var aM 		= req.body.sA;
+		var hosp	= req.body.h;
+		var esp 	= req.body.e;
+		var ced		= req.body.c;
+		var values 	= `'${nombre}', '${aP}', '${aM}', ${hosp}, ${esp}, '${ced}'`
+		var query = `INSERT INTO doctores(nombre, primerApellido, segundoApellido, idHospital, especialidad, cedula) VALUES(${values});`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:"Es posible que el doctor ya se encuentre registrado. Verifica los datos."});
+			} else{
+				res.json({reg:"Doctor registrado correctamente."});
+			}
+		});
+	});
+	router.post("/imss/busqAfiliado", function(req, res){
+		var noAfi 	= req.body.af;
+		var query = `SELECT * FROM afiliados WHERE numeroAfiliacion LIKE ${noAfi}`;
+		connection.query(query, function(err, rows){
+			if(err) {
+				res.json({error:"El número de afiliación buscado no existe."});
+			} else{
+				if(Array.isArray(rows)){
+					if(rows.length == 1){
+						res.json({n:rows[0].nombre, ap:rows[0].primerApellido, am:rows[0].segundoApellido, t:rows[0].telefono, c:rows[0].email, h:rows[0].idHospital});
+					}
+				}
+			}
+		});
+	});
+	router.post("/imss/busqDoctor", function(req, res){
+		var cedula 	= req.body.c;
+		var query = `SELECT * FROM doctores WHERE cedula LIKE ${cedula}`;
+		connection.query(query, function(err, rows){
+			if(err) {
+				res.json({error:"La cédula buscada no existe."});
+			} else{
+				if(Array.isArray(rows)){
+					if(rows.length == 1){
+						res.json({n:rows[0].nombre, ap:rows[0].primerApellido, am:rows[0].segundoApellido, e:rows[0].especialidad, h:rows[0].idHospital});
+					}
+				}
+			}
+		});
+	});
+	router.post("/imss/modAfiliado", function(req, res){
+		var tel 	= req.body.tel;
+		var cli 	= req.body.cli;
+		var correo	= req.body.c;
+		var af 		= req.body.af;
+		var query = `UPDATE afiliados SET telefono='${tel}', idHospital=${cli}, email='${correo}' WHERE numeroAfiliacion=${af}`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:true});
+			} else{
+				res.json({mod:"Afiliado modificado exitosamente."});
+			}
+		});
+	});
+	router.post("/imss/delAfiliado", function(req, res){
+		var af 		= req.body.af;
+		var query = `DELETE FROM afiliados WHERE numeroAfiliacion='${af}'`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:true});
+			} else{
+				res.json({del:"Afiliado eliminado exitosamente."});
+			}
+		});
+	});
+	router.post("/imss/delDoctor", function(req, res){
+		var c 		= req.body.c;
+		var query = `DELETE FROM doctores WHERE cedula='${c}'`;
+		connection.query(query, function(err){
+			if(err) {
+				res.json({error:true});
+			} else{
+				res.json({del:"Doctor eliminado exitosamente."});
+			}
+		});
+	});
+	
 }
 
 module.exports = REST_ROUTER;
