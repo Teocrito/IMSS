@@ -83,9 +83,14 @@ function getClinica(){
 
 function getHrs(){
 	var fecha = document.getElementById('fecha').value;
+	fecha = fecha.split('-');
+	fecha = new Date(fecha[1]+'-'+fecha[2]+'-'+fecha[0]);
 	var esp = document.getElementById('esp').value;
-	if ( fecha = new Date(fecha)){
-		if (fecha > Date.now()){
+	hoy = new Date(Date.now);
+	mes = ((Number(hoy.getMonth())+3) < 12)?(Number(hoy.getMonth())+3):(Number(hoy.getMonth())+3-12)
+	limite = new Date(mes+'-'+hoy.getDate()+'-'+hoy.getFullYear());
+	if ( fecha.getDate() != NaN){
+		if (fecha > hoy && fecha < limite){
 			var op = "";
 			var drop = document.getElementById('hrs');
 			var ajax = new XMLHttpRequest();
@@ -104,12 +109,49 @@ function getHrs(){
 			};
 			ajax.open('POST','http://localhost:3000/IMSS/horariosDisponibles');
 			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-			f = fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear();
+			f = fecha.getDate()+"/"+(Number(fecha.getMonth())+1)+"/"+fecha.getFullYear();
 			ajax.send('fecha='+f+'&hosp='+hosp+'&esp='+esp);
 		}else{
-			msgErr('Selecciona una fecha posterior a hoy');	
+			msgErr('Selecciona una fecha posterior a hoy y anterior a dos meses.');	
 		}
 	}else{
 		msgErr('Fecha no valida.');
 	}
+}
+
+function guardarCita(){
+	var fecha = document.getElementById('fecha').value;
+	fecha = fecha.split('-');
+	fecha = new Date(fecha[1]+'-'+fecha[2]+'-'+fecha[0]);
+	var espDiv = document.getElementById('esp');
+	var esp = espDiv.options[espDiv.selectedIndex].value;
+	var hr = document.getElementById('hrs').value;
+	hoy = new Date(Date.now);
+	mes = ((Number(hoy.getMonth())+3) < 12)?(Number(hoy.getMonth())+3):(Number(hoy.getMonth())+3-12)
+	limite = new Date(mes+'-'+hoy.getDate()+'-'+hoy.getFullYear());
+	if ( fecha.getDate() != NaN){
+		if (fecha > hoy && fecha < limite){
+			var ajax = new XMLHttpRequest();
+			ajax.onreadystatechange = function (){
+				if (this.status == 200 && this.readyState == 4){
+					var datos = JSON.parse(this.responseText);
+					if (!datos.err){
+						msgAlrt('Se ha agendado su cita.')
+						getEspecialidades()
+					}else{
+						msgErr(datos.msg)
+					}
+				}
+			};
+			ajax.open('POST','http://localhost:3000/IMSS/agendarCita');
+			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			f = fecha.getFullYear()+'-'+(Number(fecha.getMonth())+1)+'-'+fecha.getDate();
+			f += ' '+hr;
+			ajax.send('user='+us+'&fecha='+f+'&hosp='+hosp+'&esp='+esp);
+		}else{
+			msgErr('Selecciona una fecha posterior a hoy y anterior a dos meses.');	
+		}
+	}else{
+		msgErr('Fecha no valida.');
+	}	
 }

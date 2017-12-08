@@ -8,7 +8,7 @@ function log(){
 			if (datos.log){
 				localStorage.setItem('usrId',datos.usrId);
 				localStorage.setItem('usrHosp',datos.hosp);
-				location.assign('imss/citas');
+				location.assign('http://'+location.host+'/imss/citas');
 			}else{
 				msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña")
 			}
