@@ -26,7 +26,9 @@
 			<p class="des">Teléfono:</p>
 			<input type="text"  class="in" id="telefono">
 			<p class="des">Clínica Asignada:</p>
-			<input type="text"  class="in" id="clinica">
+			<select name="clinica" id="clinica" class="in">
+				
+			</select>
 			<p class="des">Correo Electrónico:</p>
 			<input type="mail" class="in" id="correo">
 			<p class="des">Contraseña:</p>
@@ -37,6 +39,6 @@
 		<p class="des">¿Ya tienes cuenta? <a href="http://localhost:3000/imss">Inicia Sesión</a></p>
 		</div>
 	</body>
-	<script type="text/javascript" src="public/js/registro.js"></script>
+	<script type="text/javascript" src="public/js/registro.js" onload="load()"></script>
 	<script type="text/javascript" src="public/js/notif.js" onload="ini()"></script>
 </html>

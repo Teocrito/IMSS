@@ -26,6 +26,7 @@ function ini(){
 
 function logOut(){
 	localStorage.removeItem('usrId');
+	localStorage.removeItem('admin');
 	location.assign('http://'+location.host+'/imss')
 }
 

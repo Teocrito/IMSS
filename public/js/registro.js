@@ -30,6 +30,25 @@ function reg(){
 	}
 }
 
+function load(){
+	var op = "";
+	var drop = document.getElementById('clinica');
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				for (var x = 0; x < datos.length; x++){
+					op += '<option value="'+datos[x].idHospital+'">'+datos[x].idHospital+' - '+datos[x].calle+' #'+datos[x].numeroExterior+', Col.'+datos[x].colonia+'</option>';
+				}	
+			}
+			drop.innerHTML = op;
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicas');
+	ajax.send();
+}
+
 function key(event){
 	if (event.keyCode == 13){
 		reg()
