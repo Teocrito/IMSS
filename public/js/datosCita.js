@@ -1,5 +1,6 @@
 var cont = 0;
 var us = localStorage.getItem('usrId');
+var hosp = localStorage.getItem('usrHosp');
 
 function mostrarCitas(){
 	div = document.getElementById("calendario");
@@ -45,23 +46,70 @@ function loadCitas(){
 function getEspecialidades(){
 	var op = "";
 	var drop = document.getElementById('esp');
-	var clin = document.getElementById('dir');
 	var ajax = new XMLHttpRequest();
 	ajax.onreadystatechange = function (){
 		if (this.status == 200 && this.readyState == 4){
-			console.log(this.responseText)
 			var datos = JSON.parse(this.responseText);
 			if (!datos.err){
-				optns = datos.especialidades;
-				for (var x = 0; x < optns.length; x++){
-					op += '<option value="'+optins[x].id+'">'+options[x].nombre+'</option>';
+				for (var x = 0; x < datos.length; x++){
+					op += '<option value="'+datos[x].id+'">'+datos[x].nombre+'</option>';
 				}	
 			}
 			drop.innerHTML = op;
-			clin.innerHTML = datos.clinica;
 		}
 	};
-	ajax.open('POST','http://localhost:3000/IMSS/getInfoCitas');
+	ajax.open('POST','http://localhost:3000/IMSS/getEspecialidades');
+	ajax.send();
+	getClinica();
+}
+
+function getClinica(){
+	var drop = document.getElementById('dir');
+	var ajax = new XMLHttpRequest();
+	ajax.onreadystatechange = function (){
+		if (this.status == 200 && this.readyState == 4){
+			var datos = JSON.parse(this.responseText);
+			if (!datos.err){
+				for (var x = 0; x < datos.length; x++){
+					drop.value = datos;
+				}	
+			}
+		}
+	};
+	ajax.open('POST','http://localhost:3000/IMSS/getClinicaUsuario');
 	ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
 	ajax.send('user='+us);
+}
+
+function getHrs(){
+	var fecha = document.getElementById('fecha').value;
+	var esp = document.getElementById('esp').value;
+	if ( fecha = new Date(fecha)){
+		if (fecha > Date.now()){
+			var op = "";
+			var drop = document.getElementById('hrs');
+			var ajax = new XMLHttpRequest();
+			ajax.onreadystatechange = function (){
+				if (this.status == 200 && this.readyState == 4){
+					var datos = JSON.parse(this.responseText);
+					if (!datos.err){
+						for (var x = 0; x < datos.length; x++){
+							op += '<option value="'+datos[x].horario+'">'+datos[x].horario+'</option>';
+						}	
+					}else{
+						msgErr(datos.msg)
+					}
+					drop.innerHTML = op;
+				}
+			};
+			ajax.open('POST','http://localhost:3000/IMSS/horariosDisponibles');
+			ajax.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+			f = fecha.getDate()+"/"+fecha.getMonth()+"/"+fecha.getFullYear();
+			ajax.send('fecha='+f+'&hosp='+hosp+'&esp='+esp);
+		}else{
+			msgErr('Selecciona una fecha posterior a hoy');	
+		}
+	}else{
+		msgErr('Fecha no valida.');
+	}
 }

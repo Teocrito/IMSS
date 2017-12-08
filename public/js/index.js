@@ -7,6 +7,7 @@ function log(){
 			var datos = JSON.parse(this.responseText);
 			if (datos.log){
 				localStorage.setItem('usrId',datos.usrId);
+				localStorage.setItem('usrHosp',datos.hosp);
 				location.assign('imss/citas');
 			}else{
 				msgErr("No se pudo iniciar sesión. Verifica usuario y contraseña")

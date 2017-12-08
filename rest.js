@@ -50,7 +50,7 @@ REST_ROUTER.prototype.handleRoutes = function(router, connection, md5) {
 					if (Array.isArray(rows)){
 						if (rows.length == 1){
 							if (rows[0].contrasenia == pass){
-								res.json({log:true,usrId:rows[0].idAfiliado});
+								res.json({log:true,usrId:rows[0].idAfiliado,hosp:rows[0].idHospital});
 							}else{
 								res.json({log:false})
 							}
@@ -88,36 +88,55 @@ WHERE idAfiliado = ${user};`;
 			}
 		});
 	});
-	router.post("/IMSS/getInfoCitas", function(req, res){
-		var user = req.body.user;
+	router.post("/IMSS/getEspecialidades", function(req, res){
 		var query = 'SELECT DISTINCT nombre, idEspecialidad as "id" FROM especialidades';
-		var esp;
-		var dir;
 		connection.query(query,function(err,rows){
 			if (err){
 				res.json({err:true});
 			}else{
 				if (Array.isArray(rows)){
-					esp = rows;
+					res.json(rows);
 				}else{
 					res.json({err:true});
 				}
 			}
 		});
-		query = `SELECT CONCAT(h.calle," #",a.numeroExterior,", ",h.colonia) as "direccion" 
-FROM afiliados a INNER JOIN hospitales h ON a.idHospital = h.idHospital WHERE idAfiliado=${user}`;
-		/*connection.query(query,function(err,rows){
+	});
+	router.post("/IMSS/getClinicaUsuario", function(req, res){
+		var user = req.body.user;
+		var query = `SELECT CONCAT(h.calle," #",h.numeroExterior,", ",h.colonia) as "direccion" FROM afiliados a 
+INNER JOIN hospitales h ON a.idHospital=h.idHospital WHERE idAfiliado=${user}`;
+		connection.query(query,function(err,rows){
 			if (err){
 				res.json({err:true});
 			}else{
 				if (Array.isArray(rows)){
-					dir = rows[0].direccion;
+					res.json(rows[0].direccion);
 				}else{
 					res.json({err:true});
 				}
 			}
-		});*/
-		res.json(esp);
+		});
+	});
+	router.post("/IMSS/horariosDisponibles", function(req, res){
+		var fecha = req.body.fecha;
+		var hosp = req.body.hosp;
+		var esp = req.body.esp;
+		var query = `SELECT h.horario FROM horarios h WHERE (SELECT COUNT(ca.idCita) FROM citasAfiliados ca WHERE 
+(SELECT a.idHospital FROM afiliados a WHERE a.idAfiliado = ca.idAfiliado) = ${hosp} and ca.especialidad = ${esp} and 
+DATE_FORMAT(ca.fecha, '%H:%i') LIKE TIME_FORMAT(h.horario,'%H:%i') and DATE_FORMAT(ca.fecha, '%e/%m/%Y') LIKE STR_TO_DATE('${fecha}','%e/%m/%Y'))
+ < (SELECT COUNT(d.idDoctor) FROM doctores d WHERE  d.idHospital= ${hosp} and d.especialidad = ${esp})`;
+		connection.query(query,function(err,rows){
+			if (err){
+				res.json({err:true,msg:'No se pudo conectar con el servidor'});
+			}else{
+				if (Array.isArray(rows)){
+					res.json(rows);
+				}else{
+					res.json({err:true,msg:'No hay horarios disonibles para esa fecha'});
+				}
+			}
+		});
 	});
 }
 
